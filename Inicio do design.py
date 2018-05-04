@@ -9,6 +9,8 @@ import sys
 from pygame.locals import *
 from random import randrange
 
+listafit = ['abacaxi', 'agua', 'morango', 'barrinha']
+
 class ComidaFit(pygame.sprite.Sprite):
     def __init__(self, arquivo_imagem, pos_x, pos_y, vel_x, vel_y):
         pygame.sprite.Sprite.__init__(self)
@@ -29,9 +31,26 @@ pygame.display.set_caption('Fit Ninja')
 
 fundo = pygame.image.load("fundo.jpg").convert()
 #falta rodar em uma lista de comidas, não só a agua
-agua = ComidaFit("agua.png", randrange(400), -600, randrange(0,5),randrange(0,5))
-agua_group = pygame.sprite.Group()
-agua_group.add(agua)
+
+#cair os alimentos da lista fit:
+for comida in listafit:
+    if comida == 'agua':
+        agua = ComidaFit("agua.png", randrange(600), -800, randrange(0,5),randrange(0,5))
+        Agua_group = pygame.sprite.Group()
+        Agua_group.add(agua)
+        
+    elif comida == 'abacaxi':
+        Abacaxi = ComidaFit("abacaxi.png", randrange(400), -600, randrange(0,5),randrange(0,5))
+        abacaxi_group = pygame.sprite.Group()
+        abacaxi_group.add(Abacaxi)
+        
+        
+    elif comida == 'morango':
+        Morango = ComidaFit("Morango.png", randrange(400), -600, randrange(0,5),randrange(0,5))
+        morango_group = pygame.sprite.Group()
+        morango_group.add(Morango)
+        
+    #elif comida == barrinha:
 
 rodando = True
 while rodando:
