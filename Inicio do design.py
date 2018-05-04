@@ -19,6 +19,9 @@ class ComidaFit(pygame.sprite.Sprite):
         self.rect.x = pos_x
         self.rect.y = pos_y
         #falta a função do movimento
+    def move(self):
+        self.rect.y += self.vy
+        
 pygame.init()
 tela = pygame.display.set_mode((800, 600), 0, 32)
 
@@ -26,8 +29,7 @@ pygame.display.set_caption('Fit Ninja')
 
 fundo = pygame.image.load("fundo.jpg").convert()
 #falta rodar em uma lista de comidas, não só a agua
-agua = ComidaFit("agua.png", randrange(400),randrange(300), 
-            randrange(-10,10), randrange(-10,10))
+agua = ComidaFit("agua.png", randrange(400), -600, randrange(0,5),randrange(0,5))
 agua_group = pygame.sprite.Group()
 agua_group.add(agua)
 
@@ -39,6 +41,10 @@ while rodando:
             
  # === SEGUNDA PARTE: LÓGICA DO JOGO ===
  #falta a looping principal do jogo
+    agua.move()
+     
+
+     
  
     tela.blit(fundo, (0, 0))
 
