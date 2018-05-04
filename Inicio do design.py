@@ -43,7 +43,7 @@ while rodando:
  #falta a looping principal do jogo
     agua.move()
      
-
+ 
      
  
     tela.blit(fundo, (0, 0))
