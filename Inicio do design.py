@@ -36,19 +36,19 @@ fundo = pygame.image.load("fundo.jpg").convert()
 for comida in listafit:
     if comida == 'agua':
         agua = ComidaFit("agua.png", randrange(400), -600, randrange(0,5),randrange(0,5))
-        Agua_group = pygame.sprite.Group()
-        Agua_group.add(agua)
+        agua_group = pygame.sprite.Group()
+        agua_group.add(agua)
         
     elif comida == 'abacaxi':
-        Abacaxi = ComidaFit("abacaxi.png", randrange(400), -600, randrange(0,5),randrange(0,5))
+        abacaxi = ComidaFit("abacaxi.png", randrange(400), -600, randrange(0,5),randrange(0,5))
         abacaxi_group = pygame.sprite.Group()
-        abacaxi_group.add(Abacaxi)
+        abacaxi_group.add(abacaxi)
         
         
     elif comida == 'morango':
-        Morango = ComidaFit("Morango.png", randrange(400), -600, randrange(0,5),randrange(0,5))
+        morango = ComidaFit("morango.png", randrange(400), -600, randrange(0,5),randrange(0,5))
         morango_group = pygame.sprite.Group()
-        morango_group.add(Morango)
+        morango_group.add(morango)
         
     #elif comida == barrinha:
 
@@ -61,13 +61,16 @@ while rodando:
  # === SEGUNDA PARTE: LÓGICA DO JOGO ===
  #falta a looping principal do jogo
     agua.move()
-     
+    abacaxi.move()
+    morango.move()     
 
      
  
     tela.blit(fundo, (0, 0))
 
     agua_group.draw(tela)
+    abacaxi_group.draw(tela)
+    morango_group.draw(tela)
 
     pygame.display.update()
 
