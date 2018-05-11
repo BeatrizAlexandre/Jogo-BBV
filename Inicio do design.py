@@ -61,8 +61,10 @@ while rodando:
             
  # === SEGUNDA PARTE: LÓGICA DO JOGO ===
  #falta a looping principal do jogo
+jogando = True
 
-while True:
+
+while jogando:
     agua.move()
     morango.move()
     abacaxi.move()
@@ -76,5 +78,7 @@ while True:
     pessego_group.draw(tela)
 
     pygame.display.update()
+    
+    
 
 pygame.display.quit()
