@@ -12,8 +12,8 @@ from random import randrange
 listafit = ['abacaxi', 'agua', 'morango', 'pessego']
 
 class ComidaFit(pygame.sprite.Sprite):
-    def _init_(self, arquivo_imagem, pos_x, pos_y, vel_x, vel_y):
-        pygame.sprite.Sprite._init_(self)
+    def __init__(self, arquivo_imagem, pos_x, pos_y, vel_x, vel_y):
+        pygame.sprite.Sprite.__init__(self)
         self.vx = vel_x
         self.vy = vel_y
         self.image = pygame.image.load(arquivo_imagem)
@@ -35,54 +35,22 @@ fundo = pygame.image.load("fundo.jpg").convert()
 #cair os alimentos da lista fit:
 for comida in listafit:
     if comida == 'agua':
-<<<<<<< HEAD
         agua = ComidaFit("agua.png", randrange(400), -600, 1, -randrange(1,5))
-=======
-<<<<<<< HEAD
-        agua = ComidaFit("agua.png", randrange(400), -600, 1, -randrange(1,5))
-=======
-        agua = ComidaFit("agua.png", randrange(400), -600, randrange(0,5),randrange(0,5))
->>>>>>> f190ad9915bfd05a604807c77b04f13876b510a0
->>>>>>> f5942d35e12e054c31fbd494821fde75fbcc7274
         agua_group = pygame.sprite.Group()
         agua_group.add(agua)
         
     elif comida == 'abacaxi':
-<<<<<<< HEAD
         abacaxi = ComidaFit("abacaxi.png", randrange(400), -600, 1, randrange(1,5))
-=======
-<<<<<<< HEAD
-        abacaxi = ComidaFit("abacaxi.png", randrange(400), -600, 1, randrange(1,5))
-=======
-        abacaxi = ComidaFit("abacaxi.png", randrange(400), -600, randrange(0,5),randrange(0,5))
->>>>>>> f190ad9915bfd05a604807c77b04f13876b510a0
->>>>>>> f5942d35e12e054c31fbd494821fde75fbcc7274
         abacaxi_group = pygame.sprite.Group()
         abacaxi_group.add(abacaxi)
         
     elif comida == 'morango':
-<<<<<<< HEAD
         morango = ComidaFit("morango.png", randrange(400), -600, 1, randrange(1,5))
-=======
-<<<<<<< HEAD
-        morango = ComidaFit("morango.png", randrange(400), -600, 1, randrange(1,5))
-=======
-        morango = ComidaFit("morango.png", randrange(400), -600, randrange(0,5),randrange(0,5))
->>>>>>> f190ad9915bfd05a604807c77b04f13876b510a0
->>>>>>> f5942d35e12e054c31fbd494821fde75fbcc7274
         morango_group = pygame.sprite.Group()
         morango_group.add(morango)
         
     elif comida == 'pessego':
-<<<<<<< HEAD
         pessego = ComidaFit("pessego.png", randrange(400), -600, 1, randrange(1,5))
-=======
-<<<<<<< HEAD
-        pessego = ComidaFit("pessego.png", randrange(400), -600, 1, randrange(1,5))
-=======
-        pessego = ComidaFit("pessego.png", randrange(400), -600, randrange(0,5),randrange(0,5))
->>>>>>> f190ad9915bfd05a604807c77b04f13876b510a0
->>>>>>> f5942d35e12e054c31fbd494821fde75fbcc7274
         pessego_group = pygame.sprite.Group()
         pessego_group.add(pessego)
         
