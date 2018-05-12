@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue May  1 13:33:31 2018
-inicio do jogo - fit ninja
-@author: vitoria
+Created on Fri May 11 08:49:15 2018
+
+@author: biaku
 """
+
 import pygame
 import sys
 from pygame.locals import *
@@ -31,33 +32,56 @@ pygame.display.set_caption('Fit Ninja')
 
 fundo = pygame.image.load("fundo.jpg").convert()
 
+#mexer o mouse
+class Mouse(pygame.sprite.Sprite):
+    def __init__(self, arquivo_imagem, pos_x, pos_y):
+        pygame.sprite.Sprite.__init__(self)
+        
+        self.image = pygame.image.load(arquivo_imagem)
+        self.rect = self.image.get_rect()
+        self.rect.x = pos_x
+        self.rect.y = pos_y
+        
+    def move(self, x, y):
+        self.rect.x = x-10
+        self.rect.y = y-10
+
+
+bolinha = Mouse("bolinha.png", 0, 0)
+bolinha_group = pygame.sprite.Group()
+bolinha_group.add(bolinha)
+
+
 #cair os alimentos da lista fit:
 for comida in listafit:
     if comida == 'agua':
-        agua = ComidaFit("agua.png", randrange(400), -600, 1, -randrange(1,5))
+        agua = ComidaFit("agua.png", randrange(400), -600, 1, randrange(1,2))
         agua_group = pygame.sprite.Group()
         agua_group.add(agua)
         
     elif comida == 'abacaxi':
-        abacaxi = ComidaFit("abacaxi.png", randrange(400), -600, 1, randrange(1,5))
+        abacaxi = ComidaFit("abacaxi.png", randrange(400), -600, 1, randrange(1,2))
         abacaxi_group = pygame.sprite.Group()
         abacaxi_group.add(abacaxi)
         
     elif comida == 'morango':
-        morango = ComidaFit("morango.png", randrange(400), -600, 1, randrange(1,5))
+        morango = ComidaFit("morango.png", randrange(400), -600, 1, randrange(1,2))
         morango_group = pygame.sprite.Group()
         morango_group.add(morango)
         
     elif comida == 'pessego':
-        pessego = ComidaFit("pessego.png", randrange(400), -600, 1, randrange(1,5))
+        pessego = ComidaFit("pessego.png", randrange(400), -600, 1, randrange(1,2))
         pessego_group = pygame.sprite.Group()
         pessego_group.add(pessego)
+        
+#usar randint
 
 rodando = True
 while rodando:
     for event in pygame.event.get():
         if event.type == QUIT:
             rodando = False
+            quit()
             
  # === SEGUNDA PARTE: LÓGICA DO JOGO ===
  #falta a looping principal do jogo
@@ -67,6 +91,29 @@ while True:
     morango.move()
     abacaxi.move()
     pessego.move()
+    
+    
+    for events in pygame.event.get():
+        if events.type == pygame.MOUSEMOTION:
+            mouse_position = pygame.mouse.get_pos()
+            bolinha.move(mouse_position[0], mouse_position[1])
+    
+    
+
+    pressed_keys = pygame.key.get_pressed()
+    if pressed_keys[K_SPACE]:
+        if pygame.sprite.spritecollide(abacaxi, bolinha_group, False):
+            abacaxi_group.remove(abacaxi)
+        if pygame.sprite.spritecollide(morango, bolinha_group, False):
+            morango_group.remove(morango)
+        if pygame.sprite.spritecollide(agua, bolinha_group, False):
+            agua_group.remove(agua)
+        if pygame.sprite.spritecollide(pessego, bolinha_group, False):
+            pessego_group.remove(pessego)    
+
+            
+
+
  
     tela.blit(fundo, (0, 0))
 
@@ -74,6 +121,8 @@ while True:
     abacaxi_group.draw(tela)
     morango_group.draw(tela)
     pessego_group.draw(tela)
+    bolinha_group.draw(tela)
+
 
     pygame.display.update()
 
