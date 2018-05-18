@@ -14,7 +14,7 @@ from random import randrange
 class InfoComida:
     FAST_FOOD = 0
     FIT = 1    
-    def _init_(self, tipo, imagem, recompensa):
+    def __init__(self, tipo, imagem, recompensa):
         self.tipo = tipo
         self.imagem = imagem
         self.recompensa = recompensa
