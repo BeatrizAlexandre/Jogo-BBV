@@ -6,7 +6,6 @@ Created on Fri May 11 08:49:15 2018
 """
 
 import pygame
-import sys
 from pygame.locals import *
 from random import randrange
 
