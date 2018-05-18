@@ -9,22 +9,49 @@ import pygame
 from pygame.locals import *
 from random import randrange
 
-listafit = ['abacaxi', 'agua', 'morango', 'pessego']
-imagens_listafit = {
-    'abacaxi': 'abacaxi.png',
-    'agua': 'agua.png',
-    'morango': 'morango.png',
-    'pessego': 'pessego.png'
-}
 
-lisFast = ['pizza', 'burger', 'bacon']
-imagens_lisFast = {
-    'pizza': 'pizza.png',
-    'burger': 'burger.png',
-    'bacon': 'bacon.png'
-}
+def text_objects(text, font):
+    textSurface = font.render('Fit Ninja', True, black)
+    return textSurface, textSurface.get_rect()
 
-#classe das comidas que SUBTRAEM pontos
+def message_display(text):
+    largeText = pygame.font.Font('freesansbold.ttf',115)
+    TextSurf, TextRect = text_objects('Fit Ninja', largeText)
+    TextRect.center = ((400),(100))
+    gameDisplay.blit(TextSurf, TextRect)
+ 
+    pygame.display.update()
+    relogio.tick(15)
+
+class Button(pygame.sprite.Sprite):
+    def __init__(self, arquivo_imagem):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load(arquivo_imagem)
+        self.rect = self.image.get_rect()
+
+    def setCords(self,x,y):
+        self.rect.topleft = x,y
+
+    def pressed(self,mouse):
+        if mouse[0] > self.rect.topleft[0] and \
+            mouse[1] > self.rect.topleft[1] and \
+            mouse[0] < self.rect.bottomright[0] and \
+            mouse[1] < self.rect.bottomright[1]:
+            return True
+        else:
+            return False
+
+class InfoComida:
+    FAST_FOOD = 0
+    FIT = 1    
+    def __init__(self, tipo, imagem, recompensa):
+        self.tipo = tipo
+        self.imagem = imagem
+        self.recompensa = recompensa
+    def move(self, x, y):
+        self.rect.x = x - 10
+        self.rect.y = y - 10
+        
 class Comida(pygame.sprite.Sprite):
     def __init__(self, arquivo_imagem, pos_x, pos_y, vel_x, vel_y, recompensa):
         pygame.sprite.Sprite.__init__(self)
@@ -53,33 +80,72 @@ class Mouse(pygame.sprite.Sprite):
         self.rect.x = x - 10
         self.rect.y = y - 10
 
+
+
+comidas = {
+    'abacaxi': InfoComida(InfoComida.FIT, 'abacaxi.png', 10),
+    'agua': InfoComida(InfoComida.FIT, 'agua.png', 10),
+    'morango': InfoComida(InfoComida.FIT, 'morango.png', 10),
+    'pessego': InfoComida(InfoComida.FIT, 'pessego.png', 10),
+    'pizza': InfoComida(InfoComida.FAST_FOOD, 'pizza.png', -10),
+    'burger': InfoComida(InfoComida.FAST_FOOD, 'burger.png', -10),
+    'bacon': InfoComida(InfoComida.FAST_FOOD, 'bacon.png', -10)
+}
+
+lista_comidas = [
+    'abacaxi', 'agua', 'morango', 'pessego', 'pizza', 'burger', 'bacon'
+]
+
+
 #Tela        
 pygame.init()
 tela = pygame.display.set_mode((800, 600), 0, 32)
 
-pygame.display.set_caption('Fit Ninja')
 
-fundo = pygame.image.load("fundo.jpg").convert()
+gameDisplay = pygame.display.set_mode((800,600))
+pygame.display.set_caption('Fit Ninja')
+fundo_inicial = pygame.image.load("fundo.jpg").convert()
+
+relogio = pygame.time.Clock()
+
+black = (0,0,0)
+white = (255,255,255)
+
+button = Button('button.png')
+button.setCords(275,200)
+
+
+
+fundo_inicial = pygame.image.load("fundo.jpg").convert()
+
+largeText = pygame.font.Font('freesansbold.ttf',115)
+TextSurf, TextRect = text_objects('Fit Ninja', largeText)
+TextRect.center = ((400),(100))
+fundo_inicial.blit(TextSurf, TextRect)
+gameDisplay.blit(fundo_inicial, (0,0))
+gameDisplay.blit(button.image, button.rect.topleft)
+pygame.display.update()
+
+
+
 
 bolinha = Mouse("bolinha.png", 0, 0)
 
-#cair os alimentos da lista Fast Food
 fast_food_group = pygame.sprite.Group()
-
-for gordura in lisFast:
-    fast = Comida(imagens_lisFast[gordura], randrange(400), -600, 1, 
-                  randrange(1,5), -10)
-    fast_food_group.add(fast)
-    
-#cair os alimentos da lista fit:
 comida_fit_group = pygame.sprite.Group()
-        
-for comida in listafit:
-    fit = Comida(imagens_listafit[comida], randrange(400), -600, 1, 
-                 randrange(1,2), 10)
-    comida_fit_group.add(fit)
-        
-#usar randint
+
+for i in range(100):
+    for c in lista_comidas:
+        c = lista_comidas[randrange(len(lista_comidas))]
+        rango = Comida(comidas[c].imagem, randrange(400), -600, 0, randrange(1,5),
+                   comidas[c].recompensa)
+        tipo_rango = comidas[c].tipo
+        if tipo_rango == InfoComida.FAST_FOOD:
+            fast_food_group.add(rango)
+        elif tipo_rango == InfoComida.FIT:
+            comida_fit_group.add(rango)
+
+
 
  # === SEGUNDA PARTE: LÓGICA DO JOGO ===
  #falta a looping principal do jogo
@@ -87,7 +153,9 @@ for comida in listafit:
 relogio = pygame.time.Clock()
 
 pygame.mixer.music.load('Baby.mp3')
-pygame.mixer.music.play(loops=-1,start=0.0)
+
+
+fundo = pygame.image.load("fundo.jpg").convert()
 
 estado = 0            
 
@@ -100,8 +168,10 @@ while estado != -1:
             if event.type == QUIT:
                 estado = -1
 
-            elif event.type == KEYDOWN:
-                if event.key == K_ESCAPE:
+            elif event.type == MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                if button.pressed(mouse_pos):
+                    pygame.mixer.music.play(loops=-1,start=0.0)
                     estado = 1
         pygame.display.update()
                 
