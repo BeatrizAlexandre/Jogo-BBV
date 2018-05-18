@@ -41,23 +41,17 @@ class Button(pygame.sprite.Sprite):
         else:
             return False
 
-
-listafit = ['abacaxi', 'agua', 'morango', 'pessego']
-imagens_listafit = {
-    'abacaxi': 'abacaxi.png',
-    'agua': 'agua.png',
-    'morango': 'morango.png',
-    'pessego': 'pessego.png'
-}
-
-lisFast = ['pizza', 'burger', 'bacon']
-imagens_lisFast = {
-    'pizza': 'pizza.png',
-    'burger': 'burger.png',
-    'bacon': 'bacon.png'
-}
-
-#classe das comidas que SUBTRAEM pontos
+class InfoComida:
+    FAST_FOOD = 0
+    FIT = 1    
+    def __init__(self, tipo, imagem, recompensa):
+        self.tipo = tipo
+        self.imagem = imagem
+        self.recompensa = recompensa
+    def move(self, x, y):
+        self.rect.x = x - 10
+        self.rect.y = y - 10
+        
 class Comida(pygame.sprite.Sprite):
     def __init__(self, arquivo_imagem, pos_x, pos_y, vel_x, vel_y, recompensa):
         pygame.sprite.Sprite.__init__(self)
@@ -85,6 +79,23 @@ class Mouse(pygame.sprite.Sprite):
     def move(self, x, y):
         self.rect.x = x - 10
         self.rect.y = y - 10
+
+
+
+comidas = {
+    'abacaxi': InfoComida(InfoComida.FIT, 'abacaxi.png', 10),
+    'agua': InfoComida(InfoComida.FIT, 'agua.png', 10),
+    'morango': InfoComida(InfoComida.FIT, 'morango.png', 10),
+    'pessego': InfoComida(InfoComida.FIT, 'pessego.png', 10),
+    'pizza': InfoComida(InfoComida.FAST_FOOD, 'pizza.png', -10),
+    'burger': InfoComida(InfoComida.FAST_FOOD, 'burger.png', -10),
+    'bacon': InfoComida(InfoComida.FAST_FOOD, 'bacon.png', -10)
+}
+
+lista_comidas = [
+    'abacaxi', 'agua', 'morango', 'pessego', 'pizza', 'burger', 'bacon'
+]
+
 
 #Tela        
 pygame.init()
@@ -120,23 +131,21 @@ pygame.display.update()
 
 bolinha = Mouse("bolinha.png", 0, 0)
 
-#cair os alimentos da lista Fast Food
 fast_food_group = pygame.sprite.Group()
-
-for gordura in lisFast:
-    fast = Comida(imagens_lisFast[gordura], randrange(400), -600, 1, 
-                  randrange(1,5), -10)
-    fast_food_group.add(fast)
-    
-#cair os alimentos da lista fit:
 comida_fit_group = pygame.sprite.Group()
-        
-for comida in listafit:
-    fit = Comida(imagens_listafit[comida], randrange(400), -600, 1, 
-                 randrange(1,2), 10)
-    comida_fit_group.add(fit)
-        
-#usar randint
+
+for i in range(100):
+    for c in lista_comidas:
+        c = lista_comidas[randrange(len(lista_comidas))]
+        rango = Comida(comidas[c].imagem, randrange(400), -600, 0, randrange(1,5),
+                   comidas[c].recompensa)
+        tipo_rango = comidas[c].tipo
+        if tipo_rango == InfoComida.FAST_FOOD:
+            fast_food_group.add(rango)
+        elif tipo_rango == InfoComida.FIT:
+            comida_fit_group.add(rango)
+
+
 
  # === SEGUNDA PARTE: LÓGICA DO JOGO ===
  #falta a looping principal do jogo
