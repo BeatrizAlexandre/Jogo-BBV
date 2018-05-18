@@ -83,13 +83,13 @@ class Mouse(pygame.sprite.Sprite):
 
 
 comidas = {
-    'abacaxi': InfoComida(InfoComida.FIT, 'abacaxi.png', 10),
-    'agua': InfoComida(InfoComida.FIT, 'agua.png', 10),
-    'morango': InfoComida(InfoComida.FIT, 'morango.png', 10),
-    'pessego': InfoComida(InfoComida.FIT, 'pessego.png', 10),
-    'pizza': InfoComida(InfoComida.FAST_FOOD, 'pizza.png', -10),
-    'burger': InfoComida(InfoComida.FAST_FOOD, 'burger.png', -10),
-    'bacon': InfoComida(InfoComida.FAST_FOOD, 'bacon.png', -10)
+    'abacaxi': InfoComida(InfoComida.FIT, 'abacaxi.png', -1),
+    'agua': InfoComida(InfoComida.FIT, 'agua.png', -1),
+    'morango': InfoComida(InfoComida.FIT, 'morango.png', -1),
+    'pessego': InfoComida(InfoComida.FIT, 'pessego.png', -1),
+    'pizza': InfoComida(InfoComida.FAST_FOOD, 'pizza.png', 1),
+    'burger': InfoComida(InfoComida.FAST_FOOD, 'burger.png', 1),
+    'bacon': InfoComida(InfoComida.FAST_FOOD, 'bacon.png', 1)
 }
 
 lista_comidas = [
@@ -97,7 +97,7 @@ lista_comidas = [
 ]
 
 
-#Tela        
+#Tela do jogo        
 pygame.init()
 tela = pygame.display.set_mode((800, 600), 0, 32)
 
@@ -162,6 +162,7 @@ pygame.mixer.music.load('Baby.mp3')
 
 fundo = pygame.image.load("fundo.jpg").convert()
 
+#TELAS
 estado = 0            
 
 while estado != -1:
@@ -187,17 +188,17 @@ while estado != -1:
             elif events.type == pygame.MOUSEMOTION:
                 mouse_position = pygame.mouse.get_pos()
                 bolinha.move(mouse_position[0], mouse_position[1])
-        
+        #destruindo comidas
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[K_SPACE]:
             fast_food_killed = pygame.sprite.spritecollide(bolinha, fast_food_group, True)
             comida_fit_killed = pygame.sprite.spritecollide(bolinha, comida_fit_group, True)
-            if fast_food_killed == True:
-                pontos += 1
-            elif fast_food_killed == False:
-                vidas -= 1
-            elif comida_fit_killed == True:
-                vidas -= 1
+            for comida in fast_food_killed:
+                pontos += comida.recompensa
+            for comida in comida_fit_killed:
+                vidas += comida.recompensa
+            
+            
     
         fast_food_group.update()
         comida_fit_group.update()
