@@ -9,6 +9,39 @@ import pygame
 from pygame.locals import *
 from random import randrange
 
+
+def text_objects(text, font):
+    textSurface = font.render('Fit Ninja', True, black)
+    return textSurface, textSurface.get_rect()
+
+def message_display(text):
+    largeText = pygame.font.Font('freesansbold.ttf',115)
+    TextSurf, TextRect = text_objects('Fit Ninja', largeText)
+    TextRect.center = ((400),(100))
+    gameDisplay.blit(TextSurf, TextRect)
+ 
+    pygame.display.update()
+    relogio.tick(15)
+
+class Button(pygame.sprite.Sprite):
+    def __init__(self, arquivo_imagem):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load(arquivo_imagem)
+        self.rect = self.image.get_rect()
+
+    def setCords(self,x,y):
+        self.rect.topleft = x,y
+
+    def pressed(self,mouse):
+        if mouse[0] > self.rect.topleft[0] and \
+            mouse[1] > self.rect.topleft[1] and \
+            mouse[0] < self.rect.bottomright[0] and \
+            mouse[1] < self.rect.bottomright[1]:
+            return True
+        else:
+            return False
+
+
 listafit = ['abacaxi', 'agua', 'morango', 'pessego']
 imagens_listafit = {
     'abacaxi': 'abacaxi.png',
@@ -57,9 +90,33 @@ class Mouse(pygame.sprite.Sprite):
 pygame.init()
 tela = pygame.display.set_mode((800, 600), 0, 32)
 
-pygame.display.set_caption('Fit Ninja')
 
-fundo = pygame.image.load("fundo.jpg").convert()
+gameDisplay = pygame.display.set_mode((800,600))
+pygame.display.set_caption('Fit Ninja')
+fundo_inicial = pygame.image.load("fundo.jpg").convert()
+
+relogio = pygame.time.Clock()
+
+black = (0,0,0)
+white = (255,255,255)
+
+button = Button('button.png')
+button.setCords(275,200)
+
+
+
+fundo_inicial = pygame.image.load("fundo.jpg").convert()
+
+largeText = pygame.font.Font('freesansbold.ttf',115)
+TextSurf, TextRect = text_objects('Fit Ninja', largeText)
+TextRect.center = ((400),(100))
+fundo_inicial.blit(TextSurf, TextRect)
+gameDisplay.blit(fundo_inicial, (0,0))
+gameDisplay.blit(button.image, button.rect.topleft)
+pygame.display.update()
+
+
+
 
 bolinha = Mouse("bolinha.png", 0, 0)
 
@@ -89,6 +146,8 @@ relogio = pygame.time.Clock()
 pygame.mixer.music.load('Baby.mp3')
 pygame.mixer.music.play(loops=-1,start=0.0)
 
+fundo = pygame.image.load("fundo.jpg").convert()
+
 estado = 0            
 
 while estado != -1:
@@ -100,8 +159,9 @@ while estado != -1:
             if event.type == QUIT:
                 estado = -1
 
-            elif event.type == KEYDOWN:
-                if event.key == K_ESCAPE:
+            elif event.type == MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                if button.pressed(mouse_pos):
                     estado = 1
         pygame.display.update()
                 
