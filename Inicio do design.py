@@ -115,7 +115,6 @@ button = Button('button.png')
 button.setCords(275,200)
 
 
-
 fundo_inicial = pygame.image.load("fundo.jpg").convert()
 
 largeText = pygame.font.Font('freesansbold.ttf',115)
@@ -145,7 +144,13 @@ for i in range(100):
         elif tipo_rango == InfoComida.FIT:
             comida_fit_group.add(rango)
 
+#Pontos
+pontos = 0
+font = pygame.font.SysFont("arial", 72)
 
+#Vidas
+vidas = 5
+fonte = pygame.font.SysFont("arial", 72)
 
  # === SEGUNDA PARTE: LÓGICA DO JOGO ===
  #falta a looping principal do jogo
@@ -186,6 +191,12 @@ while estado != -1:
         if pressed_keys[K_SPACE]:
             fast_food_killed = pygame.sprite.spritecollide(bolinha, fast_food_group, True)
             comida_fit_killed = pygame.sprite.spritecollide(bolinha, comida_fit_group, True)
+            if fast_food_killed == True:
+                pontos += 1
+            elif fast_food_killed == False:
+                vidas -= 1
+            elif comida_fit_killed == True:
+                vidas -= 1
     
         fast_food_group.update()
         comida_fit_group.update()
@@ -193,6 +204,14 @@ while estado != -1:
         tela.blit(fundo, (0, 0))
     
         tela.blit(bolinha.image, (bolinha.rect.x, bolinha.rect.y))
+        
+        #MOSTRA OS PONTOS NA TELA
+        text = font.render("Pontos: {0}". format(pontos), True, (0, 1, 0))
+        tela.blit(text, (580 - text.get_width() // 5, 120 - text.get_height() // 1))
+        
+        #MOSTRA AS VIDAS NA TELA
+        texto = font.render("Vidas: {0}". format(vidas), True, (0, 1, 0))
+        tela.blit(texto, (220 - texto.get_width() // 1, 120 - texto.get_height() // 1))
         
         fast_food_group.draw(tela)
         comida_fit_group.draw(tela)
