@@ -178,7 +178,7 @@ while True:
             burger_group.remove(burger)
             pontos += 1
     
-    text = font.render("Pontos: {0}". format(pontos), True, (0, 128, 0))
+    text = font.render("Pontos: {0}". format(pontos), True, (0, 1, 0))
 
     tela.blit(fundo, (0, 0))
     tela.blit(text, (320 - text.get_width() // 2, 240 - text.get_height() // 2))
