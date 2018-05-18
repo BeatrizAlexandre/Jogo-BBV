@@ -158,7 +158,7 @@ fonte = pygame.font.SysFont("arial", 72)
 relogio = pygame.time.Clock()
 
 pygame.mixer.music.load('Baby.mp3')
-pygame.mixer.music.play(loops=-1,start=0.0)
+
 
 fundo = pygame.image.load("fundo.jpg").convert()
 
@@ -176,6 +176,7 @@ while estado != -1:
             elif event.type == MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 if button.pressed(mouse_pos):
+                    pygame.mixer.music.play(loops=-1,start=0.0)
                     estado = 1
         pygame.display.update()
                 
