@@ -146,11 +146,11 @@ for i in range(100):
 
 #Pontos
 pontos = 0
-font = pygame.font.SysFont("arial", 72)
+font = pygame.font.SysFont("arial", 55)
 
 #Vidas
 vidas = 5
-fonte = pygame.font.SysFont("arial", 72)
+fonte = pygame.font.SysFont("arial", 55)
 
  # === SEGUNDA PARTE: LÓGICA DO JOGO ===
  #falta a looping principal do jogo
@@ -197,7 +197,9 @@ while estado != -1:
                 pontos += comida.recompensa
             for comida in comida_fit_killed:
                 vidas += comida.recompensa
-            
+            if vidas < 0:
+                events.type = pygame.quit()
+                estado = 7 # TELA GAME OVER
             
     
         fast_food_group.update()
@@ -213,12 +215,25 @@ while estado != -1:
         
         #MOSTRA AS VIDAS NA TELA
         texto = font.render("Vidas: {0}". format(vidas), True, (0, 1, 0))
-        tela.blit(texto, (220 - texto.get_width() // 1, 120 - texto.get_height() // 1))
+        tela.blit(texto, (230 - texto.get_width() // 1, 120 - texto.get_height() // 1))
         
         fast_food_group.draw(tela)
         comida_fit_group.draw(tela)
     
         pygame.display.update()
+        
+#    elif estado == 7:  #GAME OVER
+#        for event in pygame.event.get():
+#            if event.type == QUIT:
+#                estado = -1
+#
+#            elif event.type == MOUSEBUTTONDOWN:
+#                mouse_pos = pygame.mouse.get_pos()
+#                if button.pressed(mouse_pos):
+#                    pygame.mixer.music.play(loops=-1,start=0.0)
+#                    estado = 1
+#        pygame.display.update()
+#        
 
 pygame.display.quit()
 pygame.mixer.quit()
