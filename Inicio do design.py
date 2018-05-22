@@ -157,7 +157,6 @@ fonte = pygame.font.SysFont("arial", 55)
 
 #Recorde
 recorde = 0
-lista_recorde = []
 fon= pygame.font.SysFont("arial", 55)
 
  # === SEGUNDA PARTE: LÓGICA DO JOGO ===
@@ -212,9 +211,6 @@ while estado != -1:
             comida_fit_killed = pygame.sprite.spritecollide(bolinha, comida_fit_group, True)
             for comida in fast_food_killed:
                 pontos += comida.recompensa
-                if pontos > recorde:
-                    recorde = pontos
-                    lista_recorde.append(recorde)
             for comida in comida_fit_killed:
                 vidas += comida.recompensa
             if vidas < 0:
@@ -241,24 +237,30 @@ while estado != -1:
         pygame.display.update()
         
     elif estado == 7:  #GAME OVER
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                estado = -1
-
-        tela.blit(fundo, (0, 0))
-        Fonte= pygame.font.SysFont("freesansbold.ttf", 115)
-        txt = Fonte.render("GAME OVER", True, (0, 1, 0))
-        tela.blit(txt, (650 - txt.get_width() // 1, 200 - txt.get_height() // 1))
-        
+        tem_recorde = False
         if pontos > recorde:
-            texto = font.render("Novo Recorde: {0}". format(recorde), True, (0, 1, 0))
-            tela.blit(texto, (500 - texto.get_width() // 1, 250 - texto.get_height() // 1))
-        
-        elif pontos <= recorde:
-            texto = font.render("Pontos: {0}". format(pontos), True, (0, 1, 0))
-            tela.blit(texto, (500 - texto.get_width() // 1, 250 - texto.get_height() // 1))
+            tem_recorde = True
+            recorde = pontos
+
+        while estado == 7:
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    estado = -1
+    
+            tela.blit(fundo, (0, 0))
+            Fonte= pygame.font.SysFont("freesansbold.ttf", 115)
+            txt = Fonte.render("GAME OVER", True, (0, 1, 0))
+            tela.blit(txt, (650 - txt.get_width() // 1, 200 - txt.get_height() // 1))
             
-        pygame.display.update()
+            if tem_recorde:
+                texto = font.render("Novo Recorde: {0}". format(recorde), True, (0, 1, 0))
+                tela.blit(texto, (500 - texto.get_width() // 1, 250 - texto.get_height() // 1))
+            
+            else:
+                texto = font.render("Pontos: {0}". format(pontos), True, (0, 1, 0))
+                tela.blit(texto, (500 - texto.get_width() // 1, 250 - texto.get_height() // 1))
+                
+            pygame.display.update()
         
 
 pygame.display.quit()
