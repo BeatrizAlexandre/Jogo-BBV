@@ -186,6 +186,9 @@ while estado != -1:
                 if button.pressed(mouse_pos):
                     pygame.mixer.music.play(loops=-1,start=0.0)
                     estado = 1
+                elif config.pressed(mouse_pos):
+                     gameDisplay.blit(fundo, (0,0))
+                     estado = 2
         pygame.display.update()
     
     elif estado == 2:
@@ -193,12 +196,6 @@ while estado != -1:
             if event.type == QUIT:
                 estado = -1
                 
-            elif event.type == MOUSEBUTTONDOWN:
-                mouse_pos = pygame.mouse.get_pos()
-                if config.pressed(mouse_pos):
-                     gameDisplay.blit(fundo, (0,0))
-                     estado = 2
-        pygame.display.update()
                 
     elif estado == 1:  # Jogo começa.
         for events in pygame.event.get():
@@ -221,6 +218,7 @@ while estado != -1:
             if vidas < 0:
 #                events.type = pygame.quit()
                 estado = 0# TELA GAME OVER
+        
             
     
         fast_food_group.update()
@@ -247,14 +245,7 @@ while estado != -1:
         for event in pygame.event.get():
             if event.type == QUIT:
                 estado = -1
-
-            elif event.type == MOUSEBUTTONDOWN:
-                mouse_pos = pygame.mouse.get_pos()
-                if button.pressed(mouse_pos):
-                    pygame.mixer.music.play(loops=-1,start=0.0)
-                    estado = 1
-        pygame.display.update()
-#        
+        
 
 pygame.display.quit()
 pygame.mixer.quit()
