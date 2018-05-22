@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue May 22 09:55:21 2018
+
+@author: vitor
+"""
+
 # -- coding: utf-8 --
 """
 Created on Fri May 11 08:49:15 2018
@@ -24,8 +31,8 @@ def message_display(text):
     relogio.tick(15)
 
 class Button(pygame.sprite.Sprite):
-    def __init__(self, arquivo_imagem):
-        pygame.sprite.Sprite.__init__(self)
+    def _init_(self, arquivo_imagem):
+        pygame.sprite.Sprite._init_(self)
         self.image = pygame.image.load(arquivo_imagem)
         self.rect = self.image.get_rect()
 
@@ -44,7 +51,7 @@ class Button(pygame.sprite.Sprite):
 class InfoComida:
     FAST_FOOD = 0
     FIT = 1    
-    def __init__(self, tipo, imagem, recompensa):
+    def _init_(self, tipo, imagem, recompensa):
         self.tipo = tipo
         self.imagem = imagem
         self.recompensa = recompensa
@@ -53,8 +60,8 @@ class InfoComida:
         self.rect.y = y - 10
         
 class Comida(pygame.sprite.Sprite):
-    def __init__(self, arquivo_imagem, pos_x, pos_y, vel_x, vel_y, recompensa):
-        pygame.sprite.Sprite.__init__(self)
+    def _init_(self, arquivo_imagem, pos_x, pos_y, vel_x, vel_y, recompensa):
+        pygame.sprite.Sprite._init_(self)
         self.recompensa = recompensa
         self.vx = vel_x
         self.vy = vel_y
@@ -68,8 +75,8 @@ class Comida(pygame.sprite.Sprite):
 
 #mexer o mouse
 class Mouse(pygame.sprite.Sprite):
-    def __init__(self, arquivo_imagem, pos_x, pos_y):
-        pygame.sprite.Sprite.__init__(self)
+    def _init_(self, arquivo_imagem, pos_x, pos_y):
+        pygame.sprite.Sprite._init_(self)
         
         self.image = pygame.image.load(arquivo_imagem)
         self.rect = self.image.get_rect()
@@ -111,8 +118,6 @@ relogio = pygame.time.Clock()
 black = (0,0,0)
 white = (255,255,255)
 
-config = Button('config.png')
-config.setCords(100,400)
 button = Button('button.png')
 button.setCords(275,200)
 
@@ -125,7 +130,6 @@ TextRect.center = ((400),(100))
 fundo_inicial.blit(TextSurf, TextRect)
 gameDisplay.blit(fundo_inicial, (0,0))
 gameDisplay.blit(button.image, button.rect.topleft)
-gameDisplay.blit(config.image, config.rect.topleft)
 pygame.display.update()
 
 
@@ -155,11 +159,6 @@ font = pygame.font.SysFont("arial", 55)
 vidas = 5
 fonte = pygame.font.SysFont("arial", 55)
 
-#Recorde
-recorde = 0
-lista_recorde = []
-fon= pygame.font.SysFont("arial", 55)
-
  # === SEGUNDA PARTE: LÓGICA DO JOGO ===
  #falta a looping principal do jogo
 
@@ -187,16 +186,7 @@ while estado != -1:
                 if button.pressed(mouse_pos):
                     pygame.mixer.music.play(loops=-1,start=0.0)
                     estado = 1
-                elif config.pressed(mouse_pos):
-                     gameDisplay.blit(fundo, (0,0))
-                     estado = 2
         pygame.display.update()
-    
-    elif estado == 2:
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                estado = -1
-                
                 
     elif estado == 1:  # Jogo começa.
         for events in pygame.event.get():
@@ -207,18 +197,16 @@ while estado != -1:
                 bolinha.move(mouse_position[0], mouse_position[1])
         #destruindo comidas
         pressed_keys = pygame.key.get_pressed()
-        if pressed_keys[K_SPACE]:
-            fast_food_killed = pygame.sprite.spritecollide(bolinha, fast_food_group, True)
-            comida_fit_killed = pygame.sprite.spritecollide(bolinha, comida_fit_group, True)
-            for comida in fast_food_killed:
-                pontos += comida.recompensa
-                if pontos > recorde:
-                    recorde = pontos
-                    lista_recorde.append(recorde)
-            for comida in comida_fit_killed:
-                vidas += comida.recompensa
-            if vidas < 0:
-                estado = 7  # TELA GAME OVER.
+        while vidas >= 0:
+            if pressed_keys[K_SPACE]:
+                fast_food_killed = pygame.sprite.spritecollide(bolinha, fast_food_group, True)
+                comida_fit_killed = pygame.sprite.spritecollide(bolinha, comida_fit_group, True)
+                for comida in fast_food_killed:
+                    pontos += comida.recompensa
+                for comida in comida_fit_killed:
+                    vidas += comida.recompensa
+        estado = 7 # TELA GAME OVER
+            
     
         fast_food_group.update()
         comida_fit_group.update()
@@ -228,8 +216,8 @@ while estado != -1:
         tela.blit(bolinha.image, (bolinha.rect.x, bolinha.rect.y))
         
         #MOSTRA OS PONTOS NA TELA
-        texto = font.render("Pontos: {0}". format(pontos), True, (0, 1, 0))
-        tela.blit(texto, (580 - texto.get_width() // 5, 120 - texto.get_height() // 1))
+        text = font.render("Pontos: {0}". format(pontos), True, (0, 1, 0))
+        tela.blit(text, (580 - text.get_width() // 5, 120 - text.get_height() // 1))
         
         #MOSTRA AS VIDAS NA TELA
         texto = font.render("Vidas: {0}". format(vidas), True, (0, 1, 0))
@@ -245,21 +233,13 @@ while estado != -1:
             if event.type == QUIT:
                 estado = -1
 
-        tela.blit(fundo, (0, 0))
-        Fonte= pygame.font.SysFont("freesansbold.ttf", 115)
-        txt = Fonte.render("GAME OVER", True, (0, 1, 0))
-        tela.blit(txt, (650 - txt.get_width() // 1, 200 - txt.get_height() // 1))
-        
-        if pontos > recorde:
-            texto = font.render("Novo Recorde: {0}". format(recorde), True, (0, 1, 0))
-            tela.blit(texto, (500 - texto.get_width() // 1, 250 - texto.get_height() // 1))
-        
-        elif pontos <= recorde:
-            texto = font.render("Pontos: {0}". format(pontos), True, (0, 1, 0))
-            tela.blit(texto, (500 - texto.get_width() // 1, 250 - texto.get_height() // 1))
-            
+            elif event.type == MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                if button.pressed(mouse_pos):
+                    pygame.mixer.music.play(loops=-1,start=0.0)
+                    estado = 1
         pygame.display.update()
-        
+#        
 
 pygame.display.quit()
 pygame.mixer.quit()
