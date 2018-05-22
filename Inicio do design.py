@@ -250,6 +250,7 @@ while estado != -1:
         Fonte= pygame.font.SysFont("freesansbold.ttf", 115)
         txt = Fonte.render("GAME OVER", True, (0, 1, 0))
         tela.blit(txt, (650 - txt.get_width() // 1, 200 - txt.get_height() // 1))
+        pygame.mixer.music.stop()
         
         if pontos > recorde:
             texto = font.render("Novo Recorde: {0}". format(recorde), True, (0, 1, 0))
