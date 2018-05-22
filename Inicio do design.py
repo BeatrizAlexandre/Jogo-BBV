@@ -83,13 +83,13 @@ class Mouse(pygame.sprite.Sprite):
 
 
 comidas = {
-    'abacaxi': InfoComida(InfoComida.FIT, 'abacaxi.png', 10),
-    'agua': InfoComida(InfoComida.FIT, 'agua.png', 10),
-    'morango': InfoComida(InfoComida.FIT, 'morango.png', 10),
-    'pessego': InfoComida(InfoComida.FIT, 'pessego.png', 10),
-    'pizza': InfoComida(InfoComida.FAST_FOOD, 'pizza.png', -10),
-    'burger': InfoComida(InfoComida.FAST_FOOD, 'burger.png', -10),
-    'bacon': InfoComida(InfoComida.FAST_FOOD, 'bacon.png', -10)
+    'abacaxi': InfoComida(InfoComida.FIT, 'abacaxi.png', -1),
+    'agua': InfoComida(InfoComida.FIT, 'agua.png', -1),
+    'morango': InfoComida(InfoComida.FIT, 'morango.png', -1),
+    'pessego': InfoComida(InfoComida.FIT, 'pessego.png', -1),
+    'pizza': InfoComida(InfoComida.FAST_FOOD, 'pizza.png', 1),
+    'burger': InfoComida(InfoComida.FAST_FOOD, 'burger.png', 1),
+    'bacon': InfoComida(InfoComida.FAST_FOOD, 'bacon.png', 1)
 }
 
 lista_comidas = [
@@ -97,7 +97,7 @@ lista_comidas = [
 ]
 
 
-#Tela        
+#Tela do jogo        
 pygame.init()
 tela = pygame.display.set_mode((800, 600), 0, 32)
 
@@ -115,7 +115,6 @@ config = Button('config.png')
 config.setCords(100,400)
 button = Button('button.png')
 button.setCords(275,200)
-
 
 
 fundo_inicial = pygame.image.load("fundo.jpg").convert()
@@ -148,7 +147,17 @@ for i in range(100):
         elif tipo_rango == InfoComida.FIT:
             comida_fit_group.add(rango)
 
+#Pontos
+pontos = 0
+font = pygame.font.SysFont("arial", 55)
 
+#Vidas
+vidas = 5
+fonte = pygame.font.SysFont("arial", 55)
+
+#Recorde
+recorde = 0
+fon= pygame.font.SysFont("arial", 55)
 
  # === SEGUNDA PARTE: LÓGICA DO JOGO ===
  #falta a looping principal do jogo
@@ -160,6 +169,7 @@ pygame.mixer.music.load('Baby.mp3')
 
 fundo = pygame.image.load("fundo.jpg").convert()
 
+#TELAS
 estado = 0            
 
 while estado != -1:
@@ -197,11 +207,21 @@ while estado != -1:
             elif events.type == pygame.MOUSEMOTION:
                 mouse_position = pygame.mouse.get_pos()
                 bolinha.move(mouse_position[0], mouse_position[1])
-        
+        #destruindo comidas
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[K_SPACE]:
             fast_food_killed = pygame.sprite.spritecollide(bolinha, fast_food_group, True)
             comida_fit_killed = pygame.sprite.spritecollide(bolinha, comida_fit_group, True)
+            for comida in fast_food_killed:
+                pontos += comida.recompensa
+                if pontos > recorde:
+                    recorde = pontos
+            for comida in comida_fit_killed:
+                vidas += comida.recompensa
+            if vidas < 0:
+#                events.type = pygame.quit()
+                estado = 0# TELA GAME OVER
+            
     
         fast_food_group.update()
         comida_fit_group.update()
@@ -210,10 +230,31 @@ while estado != -1:
     
         tela.blit(bolinha.image, (bolinha.rect.x, bolinha.rect.y))
         
+        #MOSTRA OS PONTOS NA TELA
+        text = font.render("Pontos: {0}". format(pontos), True, (0, 1, 0))
+        tela.blit(text, (580 - text.get_width() // 5, 120 - text.get_height() // 1))
+        
+        #MOSTRA AS VIDAS NA TELA
+        texto = font.render("Vidas: {0}". format(vidas), True, (0, 1, 0))
+        tela.blit(texto, (230 - texto.get_width() // 1, 120 - texto.get_height() // 1))
+        
         fast_food_group.draw(tela)
         comida_fit_group.draw(tela)
     
         pygame.display.update()
+        
+    elif estado == 7:  #GAME OVER
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                estado = -1
+
+            elif event.type == MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                if button.pressed(mouse_pos):
+                    pygame.mixer.music.play(loops=-1,start=0.0)
+                    estado = 1
+        pygame.display.update()
+#        
 
 pygame.display.quit()
 pygame.mixer.quit()
