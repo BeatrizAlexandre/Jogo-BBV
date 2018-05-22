@@ -165,7 +165,7 @@ fon= pygame.font.SysFont("arial", 55)
 relogio = pygame.time.Clock()
 
 pygame.mixer.music.load('Baby.mp3')
-
+#pygame.mixer.Sound('yay.wav')
 
 fundo = pygame.image.load("fundo.jpg").convert()
 
@@ -210,6 +210,7 @@ while estado != -1:
             fast_food_killed = pygame.sprite.spritecollide(bolinha, fast_food_group, True)
             comida_fit_killed = pygame.sprite.spritecollide(bolinha, comida_fit_group, True)
             for comida in fast_food_killed:
+                #pygame.mixer.Sound.play(1)
                 pontos += comida.recompensa
             for comida in comida_fit_killed:
                 vidas += comida.recompensa
@@ -237,7 +238,19 @@ while estado != -1:
         pygame.display.update()
         
     elif estado == 7:  #GAME OVER
+
         tem_recorde = False
+
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                estado = -1
+
+        tela.blit(fundo, (0, 0))
+        Fonte= pygame.font.SysFont("freesansbold.ttf", 115)
+        txt = Fonte.render("GAME OVER", True, (0, 1, 0))
+        tela.blit(txt, (650 - txt.get_width() // 1, 200 - txt.get_height() // 1))
+        pygame.mixer.music.stop()
+
         if pontos > recorde:
             tem_recorde = True
             recorde = pontos
