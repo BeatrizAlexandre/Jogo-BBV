@@ -157,6 +157,7 @@ fonte = pygame.font.SysFont("arial", 55)
 
 #Recorde
 recorde = 0
+lista_recorde = []
 fon= pygame.font.SysFont("arial", 55)
 
  # === SEGUNDA PARTE: LÓGICA DO JOGO ===
@@ -214,13 +215,11 @@ while estado != -1:
                 pontos += comida.recompensa
                 if pontos > recorde:
                     recorde = pontos
+                    lista_recorde.append(recorde)
             for comida in comida_fit_killed:
                 vidas += comida.recompensa
             if vidas < 0:
-#                events.type = pygame.quit()
-                estado = 0# TELA GAME OVER
-        
-            
+                estado = 7  # TELA GAME OVER.
     
         fast_food_group.update()
         comida_fit_group.update()
@@ -230,8 +229,8 @@ while estado != -1:
         tela.blit(bolinha.image, (bolinha.rect.x, bolinha.rect.y))
         
         #MOSTRA OS PONTOS NA TELA
-        text = font.render("Pontos: {0}". format(pontos), True, (0, 1, 0))
-        tela.blit(text, (580 - text.get_width() // 5, 120 - text.get_height() // 1))
+        texto = font.render("Pontos: {0}". format(pontos), True, (0, 1, 0))
+        tela.blit(texto, (580 - texto.get_width() // 5, 120 - texto.get_height() // 1))
         
         #MOSTRA AS VIDAS NA TELA
         texto = font.render("Vidas: {0}". format(vidas), True, (0, 1, 0))
@@ -246,6 +245,21 @@ while estado != -1:
         for event in pygame.event.get():
             if event.type == QUIT:
                 estado = -1
+
+        tela.blit(fundo, (0, 0))
+        Fonte= pygame.font.SysFont("freesansbold.ttf", 115)
+        txt = Fonte.render("GAME OVER", True, (0, 1, 0))
+        tela.blit(txt, (650 - txt.get_width() // 1, 200 - txt.get_height() // 1))
+        
+        if pontos > recorde:
+            texto = font.render("Novo Recorde: {0}". format(recorde), True, (0, 1, 0))
+            tela.blit(texto, (500 - texto.get_width() // 1, 250 - texto.get_height() // 1))
+        
+        elif pontos <= recorde:
+            texto = font.render("Pontos: {0}". format(pontos), True, (0, 1, 0))
+            tela.blit(texto, (500 - texto.get_width() // 1, 250 - texto.get_height() // 1))
+            
+        pygame.display.update()
         
 
 pygame.display.quit()
