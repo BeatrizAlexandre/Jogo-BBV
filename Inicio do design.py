@@ -152,6 +152,10 @@ font = pygame.font.SysFont("arial", 55)
 vidas = 5
 fonte = pygame.font.SysFont("arial", 55)
 
+#Recorde
+recorde = 0
+fon= pygame.font.SysFont("arial", 55)
+
  # === SEGUNDA PARTE: LÓGICA DO JOGO ===
  #falta a looping principal do jogo
 
@@ -195,11 +199,13 @@ while estado != -1:
             comida_fit_killed = pygame.sprite.spritecollide(bolinha, comida_fit_group, True)
             for comida in fast_food_killed:
                 pontos += comida.recompensa
+                if pontos > recorde:
+                    recorde = pontos
             for comida in comida_fit_killed:
                 vidas += comida.recompensa
             if vidas < 0:
-                events.type = pygame.quit()
-                estado = 7 # TELA GAME OVER
+#                events.type = pygame.quit()
+                estado = 0# TELA GAME OVER
             
     
         fast_food_group.update()
@@ -222,17 +228,17 @@ while estado != -1:
     
         pygame.display.update()
         
-#    elif estado == 7:  #GAME OVER
-#        for event in pygame.event.get():
-#            if event.type == QUIT:
-#                estado = -1
-#
-#            elif event.type == MOUSEBUTTONDOWN:
-#                mouse_pos = pygame.mouse.get_pos()
-#                if button.pressed(mouse_pos):
-#                    pygame.mixer.music.play(loops=-1,start=0.0)
-#                    estado = 1
-#        pygame.display.update()
+    elif estado == 7:  #GAME OVER
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                estado = -1
+
+            elif event.type == MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                if button.pressed(mouse_pos):
+                    pygame.mixer.music.play(loops=-1,start=0.0)
+                    estado = 1
+        pygame.display.update()
 #        
 
 pygame.display.quit()
