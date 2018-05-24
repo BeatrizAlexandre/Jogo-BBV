@@ -128,18 +128,15 @@ gameDisplay.blit(button.image, button.rect.topleft)
 gameDisplay.blit(config.image, config.rect.topleft)
 pygame.display.update()
 
-
-
-
 bolinha = Mouse("bolinha.png", 0, 0)
 
 fast_food_group = pygame.sprite.Group()
 comida_fit_group = pygame.sprite.Group()
 
-for i in range(100):
+for i in range(10):
     for c in lista_comidas:
-        c = lista_comidas[randrange(len(lista_comidas))]
-        rango = Comida(comidas[c].imagem, randrange(400), -600, 0, randrange(1,5),
+        c = lista_comidas[randrange(0,len(lista_comidas))]
+        rango = Comida(comidas[c].imagem, randrange(0,800,130), -600, 0, randrange(1,5),
                    comidas[c].recompensa)
         tipo_rango = comidas[c].tipo
         if tipo_rango == InfoComida.FAST_FOOD:
