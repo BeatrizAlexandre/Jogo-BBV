@@ -8,6 +8,7 @@ Created on Fri May 11 08:49:15 2018
 import pygame
 from pygame.locals import *
 from random import randrange
+from random import randint
 
 
 def text_objects(text, font):
@@ -142,7 +143,7 @@ fast_food_group = pygame.sprite.Group()
 comida_fit_group = pygame.sprite.Group()
 
 ultima_pos_y = 0
-for i in range(130):
+for i in range(randint(1,130)):
     c = lista_comidas[randrange(0,len(lista_comidas))]
     
     pos_x = randrange(0,600,130)
@@ -179,6 +180,16 @@ pygame.mixer.music.load('Baby.mp3')
 #pygame.mixer.Sound('yay.wav')
 
 fundo = pygame.image.load("fundo.jpg").convert()
+
+right = pygame.image.load('right.png')
+abacaxi = pygame.image.load('abacaxi.png')
+agua = pygame.image.load('agua.png')
+morango = pygame.image.load('morango.png')
+pessego = pygame.image.load('pessego.png')
+wrong = pygame.image.load('wrong.png')
+pizza = pygame.image.load('pizza.png')
+burger = pygame.image.load('burger.png')
+bacon = pygame.image.load('bacon.png')
 
 #TELAS
 estado = 0            
@@ -271,7 +282,7 @@ while estado != -1:
                 mouse_pos = pygame.mouse.get_pos()
                 if music.pressed(mouse_pos):
                     pygame.mixer.quit()
-                    estado = 1
+                    estado = 3
                     
                 elif sound.pressed(mouse_pos):
                     pygame.mixer.quit()
@@ -279,13 +290,50 @@ while estado != -1:
                 
                 elif button.pressed(mouse_pos):
                     pygame.mixer.music.play(loops=-1,start=0.0)
-                    estado = 1
-                    
+                    estado = 3
                     
         
                     
         pygame.display.update()
             
+            
+    elif estado == 3:
+        gameDisplay.blit(fundo, (0,0))
+        gameDisplay.blit(right, (225,100))
+        gameDisplay.blit(agua, (50,300))
+        gameDisplay.blit(abacaxi, (250,250))
+        gameDisplay.blit(morango, (450,300))
+        gameDisplay.blit(pessego, (650,300))
+        texto = font.render("Não clique nas comidas fit!", True, pink)
+        tela.blit(texto, (125,500))      
+        pygame.display.update()        
+        for events in pygame.event.get():
+            if events.type == pygame.QUIT:
+                estado = -1
+            elif events.type == pygame.KEYDOWN:
+                pressed_keys = pygame.key.get_pressed()
+                if pressed_keys[K_SPACE]:
+                    estado = 4        
+    
+    elif estado == 4:
+        gameDisplay.blit(fundo, (0,0))
+        gameDisplay.blit(wrong, (225,50))
+        gameDisplay.blit(pizza, (75,250))
+        gameDisplay.blit(burger, (300,250))
+        gameDisplay.blit(bacon, (525,300))
+        texto = font.render("Clique nos fast foods!", True, pink)
+        tela.blit(texto, (125,450))
+        text = font.render("Aperte espaço", True, pink)
+        tela.blit (text, (300, 500))
+        pygame.display.update()
+        for events in pygame.event.get():
+            if events.type == pygame.QUIT:
+                estado = -1
+            elif events.type == pygame.KEYDOWN:
+                pressed_keys = pygame.key.get_pressed()
+                if pressed_keys[K_SPACE]:
+                    estado = 1
+        
         
     elif estado == 7:  #GAME OVER
         tela.blit(fundo, (0, 0))
