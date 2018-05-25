@@ -11,7 +11,7 @@ from random import randrange
 
 
 def text_objects(text, font):
-    textSurface = font.render('Fit Ninja', True, black)
+    textSurface = font.render('Fit Ninja', True, pink)
     return textSurface, textSurface.get_rect()
 
 def message_display(text):
@@ -110,6 +110,7 @@ relogio = pygame.time.Clock()
 
 black = (0,0,0)
 white = (255,255,255)
+pink = (255,110,246)
 
 config = Button('config.png')
 config.setCords(100,400)
