@@ -62,7 +62,7 @@ class Comida(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = pos_x
         self.rect.y = pos_y
-
+        
     def update(self):
         self.rect.y += self.vy
 
@@ -79,8 +79,6 @@ class Mouse(pygame.sprite.Sprite):
     def move(self, x, y):
         self.rect.x = x - 10
         self.rect.y = y - 10
-
-
 
 comidas = {
     'abacaxi': InfoComida(InfoComida.FIT, 'abacaxi.png', -1),
@@ -136,16 +134,20 @@ bolinha = Mouse("bolinha.png", 0, 0)
 fast_food_group = pygame.sprite.Group()
 comida_fit_group = pygame.sprite.Group()
 
-for i in range(10):
-    for c in lista_comidas:
-        c = lista_comidas[randrange(0,len(lista_comidas))]
-        rango = Comida(comidas[c].imagem, randrange(0,800,130), -600, 0, randrange(1,5),
-                   comidas[c].recompensa)
-        tipo_rango = comidas[c].tipo
-        if tipo_rango == InfoComida.FAST_FOOD:
-            fast_food_group.add(rango)
-        elif tipo_rango == InfoComida.FIT:
-            comida_fit_group.add(rango)
+ultima_pos_y = 0
+for i in range(130):
+    c = lista_comidas[randrange(0,len(lista_comidas))]
+    
+    pos_x = randrange(0,600,130)
+    pos_y = ultima_pos_y - randrange(200)
+    ultima_pos_y = pos_y
+    rango = Comida(comidas[c].imagem, pos_x, pos_y, 0, randrange(1,3),
+               comidas[c].recompensa)
+    tipo_rango = comidas[c].tipo
+    if tipo_rango == InfoComida.FAST_FOOD:
+        fast_food_group.add(rango)
+    elif tipo_rango == InfoComida.FIT:
+        comida_fit_group.add(rango)
             
 
 
@@ -206,6 +208,7 @@ while estado != -1:
             elif events.type == pygame.MOUSEMOTION:
                 mouse_position = pygame.mouse.get_pos()
                 bolinha.move(mouse_position[0], mouse_position[1])
+                
         #destruindo comidas
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[K_SPACE]:
@@ -221,7 +224,18 @@ while estado != -1:
     
         fast_food_group.update()
         comida_fit_group.update()
-                
+        
+        tem_comida = False
+        for c in fast_food_group:
+            if c.rect.y < 600:
+                tem_comida = True
+        for c in comida_fit_group:
+            if c.rect.y < 600:
+                tem_comida = True
+
+        if not tem_comida:
+            estado = 7
+        
         tela.blit(fundo, (0, 0))
     
         tela.blit(bolinha.image, (bolinha.rect.x, bolinha.rect.y))
