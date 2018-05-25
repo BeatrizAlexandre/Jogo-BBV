@@ -114,9 +114,14 @@ config = Button('config.png')
 config.setCords(100,400)
 button = Button('button.png')
 button.setCords(275,200)
+<<<<<<< HEAD
+music = Button ('music.png')
+music.setCords(100,400)
+=======
 replay = Button('replay.png')
 replay.setCords(275,400)
 
+>>>>>>> 1143f7e1f33ff2c46db4b4e0c014bc61d8355b97
 
 fundo_inicial = pygame.image.load("fundo.jpg").convert()
 
@@ -194,13 +199,8 @@ while estado != -1:
                      gameDisplay.blit(fundo, (0,0))
                      estado = 2
         pygame.display.update()
-    
-    elif estado == 2:
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                estado = -1
-                
-                
+
+              
     elif estado == 1:  # Jogo começa.
         for events in pygame.event.get():
             if events.type == pygame.QUIT:
@@ -217,6 +217,8 @@ while estado != -1:
             for comida in fast_food_killed:
                 #pygame.mixer.Sound.play(1)
                 pontos += comida.recompensa
+#                if fast_food_killed not True:
+#                    vidas -= comida.recompensa
             for comida in comida_fit_killed:
                 vidas += comida.recompensa
             if vidas < 0:
@@ -253,6 +255,35 @@ while estado != -1:
     
         pygame.display.update()
         
+    elif estado == 2:
+        
+        gameDisplay.blit(button.image, button.rect.topleft)
+        gameDisplay.blit(music.image, music.rect.topleft)
+        
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                estado = -1
+                
+            elif event.type == MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                if music.pressed(mouse_pos):
+                    pygame.mixer.quit()
+                    estado = 1
+                    
+#                elif sound.pressed(mouse_pos):
+#                    pygame.mixer.quit()
+#                    estado = 2
+                
+                elif button.pressed(mouse_pos):
+                    pygame.mixer.music.play(loops=-1,start=0.0)
+                    estado = 1
+                    
+                    
+        
+                    
+        pygame.display.update()
+            
+        
     elif estado == 7:  #GAME OVER
 
         tem_recorde = False
@@ -269,9 +300,19 @@ while estado != -1:
         pygame.mixer.music.stop()
         
         if event.type == MOUSEBUTTONDOWN:
+<<<<<<< HEAD
+                mouse_pos = pygame.mouse.get_pos()
+                if button.pressed(mouse_pos):
+                    pygame.mixer.music.play(loops=-1,start=0.0)
+                    estado = 1
+                elif config.pressed(mouse_pos):
+                     gameDisplay.blit(fundo, (0,0))
+                     estado = 2
+=======
             mouse_pos = pygame.mouse.get_pos()
             if button.pressed(mouse_pos):
                 estado == 0
+>>>>>>> 1143f7e1f33ff2c46db4b4e0c014bc61d8355b97
 
         if pontos > recorde:
             tem_recorde = True
@@ -289,11 +330,13 @@ while estado != -1:
             
             if tem_recorde:
                 texto = font.render("Novo Recorde: {0}". format(recorde), True, (0, 1, 0))
-                tela.blit(texto, (500 - texto.get_width() // 1, 250 - texto.get_height() // 1))
+                tela.blit(texto, (550 - texto.get_width() // 1, 250 - texto.get_height() // 1))
             
             else:
                 texto = font.render("Pontos: {0}". format(pontos), True, (0, 1, 0))
                 tela.blit(texto, (500 - texto.get_width() // 1, 250 - texto.get_height() // 1))
+                
+
                 
             pygame.display.update()
         
