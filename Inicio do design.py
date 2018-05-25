@@ -2,7 +2,7 @@
 """
 Created on Fri May 11 08:49:15 2018
 
-@author: biaku
+@author: vitoria
 """
 
 import pygame
@@ -143,6 +143,8 @@ for i in range(10):
             fast_food_group.add(rango)
         elif tipo_rango == InfoComida.FIT:
             comida_fit_group.add(rango)
+            
+
 
 #Pontos
 pontos = 0
