@@ -116,6 +116,8 @@ config = Button('config.png')
 config.setCords(100,400)
 button = Button('button.png')
 button.setCords(275,200)
+replay = Button('replay.png')
+replay.setCords(275,400)
 
 
 fundo_inicial = pygame.image.load("fundo.jpg").convert()
@@ -249,7 +251,13 @@ while estado != -1:
         Fonte= pygame.font.SysFont("freesansbold.ttf", 115)
         txt = Fonte.render("GAME OVER", True, (0, 1, 0))
         tela.blit(txt, (650 - txt.get_width() // 1, 200 - txt.get_height() // 1))
+        gameDisplay.blit(replay.image, replay.rect.topleft)
         pygame.mixer.music.stop()
+        
+        if event.type == MOUSEBUTTONDOWN:
+            mouse_pos = pygame.mouse.get_pos()
+            if button.pressed(mouse_pos):
+                estado == 0
 
         if pontos > recorde:
             tem_recorde = True
