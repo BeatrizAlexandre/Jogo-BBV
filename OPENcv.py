@@ -30,20 +30,37 @@ Created on Fri Apr 27 11:31:52 2018
 import cv2
 import numpy as np
 
-lowerBound = np.array([20,100,100])
-upperBound = np.array([80,255,255])
+lowerBound = np.array([50,150,0])
+upperBound = np.array([150,255,255])
 
 cam = cv2.VideoCapture(0)
 
 teste = True
 while teste:
     ret, img = cam.read()
-    print(img)
-    img = cv2.resize(img, (340, 220))    
+    img = cv2.resize(img, (800, 600))    
     imgHSV = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
     mask = cv2.inRange(imgHSV,lowerBound,upperBound)
-    x,y,w,h=cv2.boundingRect(mask)
-    print(x, y)
+
+    # Find the largest contour and extract it
+    # https://stackoverflow.com/questions/39044886/finding-largest-blob-in-image
+    _, contours, _ = cv2.findContours(mask,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE )
+
+    maxContour = 0
+    maxContourData = None
+    for contour in contours:
+        contourSize = cv2.contourArea(contour)
+        if contourSize > maxContour:
+            maxContour = contourSize
+            maxContourData = contour
+
+    if maxContourData is not None:
+        x,y,w,h=cv2.boundingRect(maxContourData)
+        x = 800 - x
+        print(x, y)
+    else:
+        print('sem contorno')
+        
     cv2.imshow('mask',mask)
     cv2.imshow('cam',img)
     cv2.waitKey(10)

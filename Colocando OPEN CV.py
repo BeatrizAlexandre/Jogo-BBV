@@ -1,14 +1,16 @@
-# -- coding: utf-8 --
+# -*- coding: utf-8 -*-
 """
-Created on Fri May 11 08:49:15 2018
+Created on Tue May 29 11:04:40 2018
 
-@author: vitoria
+@author: Beatriz
 """
 #========= IMPORTANDO BIBLIOTECAS======
 import pygame
 from pygame.locals import *
 from random import randrange
 from random import randint
+import cv2
+import numpy as np
 
 #======== DEFININDO FUNÇÕES====
 
@@ -24,6 +26,47 @@ def message_display(text):
  
     pygame.display.update()
     relogio.tick(15)
+  
+
+lowerBound = np.array([20,100,20]) #amarelo
+upperBound = np.array([80,255,255]) #amarelo
+cam = cv2.VideoCapture(0)
+
+def open_cv():
+    
+
+    ret, img = cam.read()
+    img = cv2.resize(img, (800, 600))    
+    imgHSV = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
+    mask = cv2.inRange(imgHSV,lowerBound,upperBound)
+    lista_x = []
+    lista_y = []
+    # Find the largest contour and extract it
+    # https://stackoverflow.com/questions/39044886/finding-largest-blob-in-image
+    _, contours, _ = cv2.findContours(mask,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE )
+
+    maxContour = 0
+    maxContourData = None
+    for contour in contours:
+        contourSize = cv2.contourArea(contour)
+        if contourSize > maxContour:
+            maxContour = contourSize
+            maxContourData = contour
+    if maxContourData is not None:
+        x,y,w,h=cv2.boundingRect(maxContourData)
+        x = 800 - x
+        ponto_x = (x + (w/2))
+        pontos_y = (y + (h/2))
+    else:
+        ponto_x = None
+        pontos_y = None
+        
+    cv2.imshow('mask',mask)
+    cv2.imshow('cam',img)
+    cv2.waitKey(10)
+    
+    return ponto_x, pontos_y
+
 
 #======== CLASSES========
 
@@ -214,7 +257,7 @@ while estado != -1:
                 estado = -1
 
             elif event.type == MOUSEBUTTONDOWN:
-                mouse_pos = pygame.mouse.get_pos()
+                mouse_pos = open_cv()
                 if button.pressed(mouse_pos):
                     pygame.mixer.music.play(loops=-1,start=0.0)
                     estado = 3
@@ -228,9 +271,8 @@ while estado != -1:
         for events in pygame.event.get():
             if events.type == pygame.QUIT:
                 estado = -1
-            elif events.type == pygame.MOUSEMOTION:
-                mouse_position = pygame.mouse.get_pos()
-                bolinha.move(mouse_position[0], mouse_position[1])
+        mouse_position = open_cv()
+        bolinha.move(mouse_position[0], mouse_position[1])
                 
         #destruindo comidas
         pressed_keys = pygame.key.get_pressed()
