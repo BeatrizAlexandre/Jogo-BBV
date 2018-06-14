@@ -191,7 +191,7 @@ comida_fit_group = pygame.sprite.Group()
 
 # ========= CAINDO COMIDAS ========
 ultima_pos_y = 0
-for i in range(randint(1,1000)):
+for i in range(randint(1,5000)):
     c = lista_comidas[randrange(0,len(lista_comidas))]
     
     pos_x = randrange(0,600,130)
@@ -204,10 +204,6 @@ for i in range(randint(1,1000)):
         fast_food_group.add(rango)
     elif tipo_rango == InfoComida.FIT:
         comida_fit_group.add(rango)
-            
-
-
-
 
 # === SEGUNDA PARTE: LÓGICA DO JOGO ===
 
@@ -298,13 +294,7 @@ while estado != -1:
                 vidas -= 1
             if vidas == 0:
                 estado = 7  # TELA GAME OVER.
-                
-        # PAUSA
-        elif event.type == MOUSEBUTTONDOWN:
-                mouse_pos = pygame.mouse.get_pos()
-                if button.pressed(mouse_pos):
-                    pygame.mixer.music.play(loops=-1,start=0.0)
-                    estado = 3 
+
     
         fast_food_group.update()
         comida_fit_group.update()
