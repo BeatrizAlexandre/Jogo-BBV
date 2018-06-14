@@ -215,9 +215,13 @@ relogio = pygame.time.Clock()
 
 #===== MUSICA ============
 pygame.mixer.music.load('getdown.mp3')
+# Link da musica
+# https://www.youtube.com/watch?v=91LPvNmw04s
 
 #======= SOM ==========
 som = pygame.mixer.Sound('som.wav')
+
+
 fundo = pygame.image.load("fundo.jpg").convert()
 
 #Pontos
@@ -357,7 +361,6 @@ while estado != -1:
                     estado = 2
                 
                 elif button.pressed(mouse_pos):
-                    #pygame.mixer.music.play(loops=-1,start=0.0)
                     estado = 1
                     
                 
@@ -426,6 +429,8 @@ while estado != -1:
             gameDisplay.blit(replay.image, replay.rect.topleft)
             tela.blit(txt2, (827 - txt.get_width() // 1, 455 - txt.get_height() // 1))
             
+            # Link dos escritos: https://nerdparadise.com/programming/pygame/part5
+            # Modificado
             if tem_recorde:
                 texto = font.render("Novo Recorde: {0}". format(recorde), True, (0, 1, 0))
                 tela.blit(texto, (550 - texto.get_width() // 1, 250 - texto.get_height() // 1))
@@ -452,3 +457,22 @@ while estado != -1:
 pygame.display.quit()
 pygame.mixer.quit()
 pygame.quit()
+
+
+# ============ Links ===============
+
+# Para entender melhor o Pygame
+#http://www.dainf.ct.utfpr.edu.br/petcoce/wp-content/uploads/2013/09/document.pdf
+#http://www.dsc.ufcg.edu.br/~pet/atividades/minicurso_pygame/MiniCursoPygame.pdf
+
+# Para diminuir as imagens
+# https://www.iloveimg.com/resize-image
+
+# Para baixar as imagens PNG
+# https://designermaodevaca.com/post/pngall
+
+# Para colocar musica e som no jogo
+# https://nerdparadise.com/programming/pygame/part3
+
+# Para converter o som
+# https://www.youtube.com/watch?v=91LPvNmw04s
